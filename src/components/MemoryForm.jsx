@@ -1,9 +1,14 @@
 import React, { useState } from 'react';
-import { Camera, MapPin, Tag, Calendar, X, Save, Eraser, Trash2, Sparkles } from 'lucide-react';
+import { Camera, MapPin, Tag, Calendar, X, Save, Eraser, Trash2, Sparkles, Plus } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { storage } from '../firebase';
 
 const MemoryForm = ({ onSubmit, onCancel, initialData, collections }) => {
-  const [formData, setFormData] = useState(initialData || {
+  const [formData, setFormData] = useState(initialData ? {
+    ...initialData,
+    images: initialData.images.map(url => ({ file: null, preview: url, isExisting: true }))
+  } : {
     title: '',
     description: '',
     story: '',
@@ -16,19 +21,20 @@ const MemoryForm = ({ onSubmit, onCancel, initialData, collections }) => {
   });
 
   const [newTag, setNewTag] = useState('');
+  const [uploading, setUploading] = useState(false);
 
   const handleImageUpload = (e) => {
     const files = Array.from(e.target.files);
-    files.forEach(file => {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setFormData(prev => ({
-          ...prev,
-          images: [...prev.images, reader.result]
-        }));
-      };
-      reader.readAsDataURL(file);
-    });
+    const newImages = files.map(file => ({
+      file,
+      preview: URL.createObjectURL(file), // local blob preview
+      isExisting: false
+    }));
+    
+    setFormData(prev => ({
+      ...prev,
+      images: [...prev.images, ...newImages]
+    }));
   };
 
   const removeImage = (index) => {
@@ -56,6 +62,35 @@ const MemoryForm = ({ onSubmit, onCancel, initialData, collections }) => {
       ...prev,
       tags: prev.tags.filter(t => t !== tagToRemove)
     }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (uploading) return;
+    
+    setUploading(true);
+    try {
+      // Upload new images to Firebase Storage
+      const uploadedUrls = await Promise.all(
+        formData.images.map(async (img) => {
+          if (img.isExisting) return img.preview;
+          
+          const fileRef = ref(storage, `memories/${Date.now()}_${img.file.name.replace(/[^a-zA-Z0-9.]/g, '')}`);
+          const snapshot = await uploadBytes(fileRef, img.file);
+          return await getDownloadURL(snapshot.ref);
+        })
+      );
+
+      // Pass the cleaned data to the parent (useMemories hook)
+      onSubmit({
+        ...formData,
+        images: uploadedUrls
+      });
+    } catch (error) {
+      console.error("Error uploading images", error);
+    } finally {
+      setUploading(false);
+    }
   };
 
   return (
@@ -203,7 +238,7 @@ const MemoryForm = ({ onSubmit, onCancel, initialData, collections }) => {
                         key={i} 
                         className="relative h-40 rounded-3xl overflow-hidden group border-2 border-white shadow-xl group"
                       >
-                        <img src={img} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Memory" />
+                        <img src={img.preview} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Memory" />
                         <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                           <button
                             onClick={() => removeImage(i)}
@@ -238,11 +273,16 @@ const MemoryForm = ({ onSubmit, onCancel, initialData, collections }) => {
           Discard Entry
         </button>
         <button
-          onClick={() => onSubmit(formData)}
-          className="px-10 py-5 btn-gradient rounded-3xl text-[11px] font-black uppercase tracking-[0.2em] flex items-center gap-4 group"
+          onClick={handleSubmit}
+          disabled={uploading}
+          className="px-10 py-5 btn-gradient rounded-3xl text-[11px] font-black uppercase tracking-[0.2em] flex items-center gap-4 group disabled:opacity-70 disabled:cursor-not-allowed"
         >
-          <Sparkles size={20} className="group-hover:scale-125 transition-transform duration-500" />
-          {initialData ? 'Refine the Moment' : 'Preserve Forever'}
+          {uploading ? (
+             <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+          ) : (
+             <Sparkles size={20} className="group-hover:scale-125 transition-transform duration-500" />
+          )}
+          {uploading ? 'Processing...' : (initialData ? 'Refine the Moment' : 'Preserve Forever')}
         </button>
       </footer>
     </div>

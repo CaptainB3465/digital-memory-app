@@ -1,78 +1,58 @@
 import { useState, useEffect, createContext, useContext } from 'react';
+import { 
+  signInWithEmailAndPassword, 
+  createUserWithEmailAndPassword, 
+  signOut, 
+  sendPasswordResetEmail,
+  onAuthStateChanged,
+  updateProfile
+} from 'firebase/auth';
+import { auth } from '../firebase';
 
 // Create the context
 const AuthContext = createContext(null);
-
-// Mock "Secure" Hash function for demo purposes
-// In a real app, never do this on the frontend. Use bcrypt on the backend.
-const mockHash = (password) => {
-  return btoa(password + "_salty_secret");
-};
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Initialize session from local storage on load
+  // Listen to Firebase Auth state changes
   useEffect(() => {
-    const checkSession = async () => {
-      try {
-        const storedToken = localStorage.getItem('digital_memory_token');
-        if (storedToken) {
-          // Decode mock JWT (base64 token)
-          const decoded = JSON.parse(atob(storedToken));
-          // Verify user exists in mock DB
-          const users = JSON.parse(localStorage.getItem('digital_memory_users') || '[]');
-          const existingUser = users.find(u => u.email === decoded.email);
-          
-          if (existingUser) {
-            setUser({ id: existingUser.id, name: existingUser.name, email: existingUser.email, avatar: existingUser.avatar });
-          } else {
-            localStorage.removeItem('digital_memory_token');
-          }
-        }
-      } catch (error) {
-        console.error("Session restoration failed:", error);
-        localStorage.removeItem('digital_memory_token');
-      } finally {
-        setLoading(false);
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        setUser({
+          id: currentUser.uid,
+          name: currentUser.displayName || currentUser.email.split('@')[0],
+          email: currentUser.email,
+          avatar: currentUser.photoURL || null
+        });
+      } else {
+        setUser(null);
       }
-    };
+      setLoading(false);
+    });
 
-    // Simulate network delay for realism
-    setTimeout(checkSession, 800);
+    // Cleanup subscription
+    return () => unsubscribe();
   }, []);
 
   const login = async (email, password, rememberMe) => {
+    // Note: Firebase handles session persistence automatically.
+    // By default, it's 'local' (persists across browser restarts) which is equivalent to rememberMe=true.
     setLoading(true);
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      const users = JSON.parse(localStorage.getItem('digital_memory_users') || '[]');
-      const user = users.find(u => u.email === email);
-      
-      if (!user) {
-        throw new Error('Invalid email or password');
-      }
-
-      if (user.passwordHash !== mockHash(password)) {
-         throw new Error('Invalid email or password');
-      }
-
-      // Create "JWT"
-      const tokenPayload = btoa(JSON.stringify({ 
-        email: user.email, 
-        id: user.id,
-        exp: Date.now() + (rememberMe ? 30 * 24 * 60 * 60 * 1000 : 24 * 60 * 60 * 1000) 
-      }));
-
-      localStorage.setItem('digital_memory_token', tokenPayload);
-      setUser({ id: user.id, name: user.name, email: user.email, avatar: user.avatar });
+      await signInWithEmailAndPassword(auth, email, password);
       return { success: true };
-
     } catch (error) {
-      return { success: false, error: error.message };
+      let message = "Invalid email or password.";
+      if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password' || error.code === 'auth/invalid-credential') {
+        message = "Invalid email or password.";
+      } else if (error.code === 'auth/too-many-requests') {
+        message = "Too many login attempts. Please try again later.";
+      } else {
+        message = error.message;
+      }
+      return { success: false, error: message };
     } finally {
       setLoading(false);
     }
@@ -81,64 +61,56 @@ export const AuthProvider = ({ children }) => {
   const signup = async (userData) => {
     setLoading(true);
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1200));
-
-      const users = JSON.parse(localStorage.getItem('digital_memory_users') || '[]');
+      const userCredential = await createUserWithEmailAndPassword(auth, userData.email, userData.password);
       
-      if (users.some(u => u.email === userData.email)) {
-        throw new Error('An account with this email already exists.');
+      // Update the user's display name
+      if (userData.name) {
+        await updateProfile(userCredential.user, {
+          displayName: userData.name
+        });
+        
+        // Update local state to reflect the new name immediately
+        setUser(prev => ({ ...prev, name: userData.name }));
       }
-
-      const newUser = {
-        id: crypto.randomUUID(),
-        name: userData.name,
-        email: userData.email,
-        passwordHash: mockHash(userData.password),
-        avatar: userData.avatar || null,
-        createdAt: new Date().toISOString()
-      };
-
-      users.push(newUser);
-      localStorage.setItem('digital_memory_users', JSON.stringify(users));
-
-      // Auto-login after signup
-      const tokenPayload = btoa(JSON.stringify({ 
-        email: newUser.email, 
-        id: newUser.id,
-        exp: Date.now() + (24 * 60 * 60 * 1000) 
-      }));
-      localStorage.setItem('digital_memory_token', tokenPayload);
-      setUser({ id: newUser.id, name: newUser.name, email: newUser.email, avatar: newUser.avatar });
       
       return { success: true };
     } catch (error) {
-      return { success: false, error: error.message };
+      let message = "An error occurred during sign up.";
+      if (error.code === 'auth/email-already-in-use') {
+        message = "An account with this email already exists.";
+      } else if (error.code === 'auth/weak-password') {
+        message = "Please choose a stronger password.";
+      } else {
+        message = error.message;
+      }
+      return { success: false, error: message };
     } finally {
       setLoading(false);
     }
   };
 
-  const logout = () => {
-    localStorage.removeItem('digital_memory_token');
-    setUser(null);
+  const logout = async () => {
+    try {
+      await signOut(auth);
+    } catch (error) {
+      console.error("Failed to log out", error);
+    }
   };
 
   const resetPassword = async (email) => {
     setLoading(true);
     try {
-       // Simulate API call for sending OTP/Link
-       await new Promise(resolve => setTimeout(resolve, 1500));
-       const users = JSON.parse(localStorage.getItem('digital_memory_users') || '[]');
-       if (!users.some(u => u.email === email)) {
-          // Even if email is not found, return success to prevent email enumeration attacks
-          return { success: true, message: "If an account exists, a recovery link has been sent." };
-       }
-       return { success: true, message: "A recovery link has been sent to your email." };
+      await sendPasswordResetEmail(auth, email);
+      return { success: true, message: "A recovery link has been sent to your email." };
     } catch (error) {
-       return { success: false, error: "Failed to process request. Please try again later." };
+      let message = "Failed to process request. Please try again later.";
+      if (error.code === 'auth/user-not-found') {
+         // Return success anyway for security to prevent email enumeration
+         return { success: true, message: "If an account exists, a recovery link has been sent." };
+      }
+      return { success: false, error: message };
     } finally {
-       setLoading(false);
+      setLoading(false);
     }
   };
 
@@ -151,7 +123,8 @@ export const AuthProvider = ({ children }) => {
     resetPassword
   };
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  // We only render children once the initial Firebase auth state is determined
+  return <AuthContext.Provider value={value}>{!loading && children}</AuthContext.Provider>;
 };
 
 // Custom hook to use auth context
