@@ -94,6 +94,11 @@ export const useSettings = () => {
       settings.appearance.fontSize === 'small' ? '14px' : 
       settings.appearance.fontSize === 'large' ? '18px' : '16px'
     );
+
+    // Apply accent color to root
+    if (settings.appearance.accentColor) {
+      document.documentElement.style.setProperty('--color-primary', settings.appearance.accentColor);
+    }
   }, [settings]);
 
   const updateSection = (section, data) => {

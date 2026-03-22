@@ -50,6 +50,8 @@ const SignUpView = ({ onNavigate }) => {
     const result = await signup({ name: formData.name, email: formData.email, password: formData.password });
     if (!result.success) {
       setError(result.error);
+    } else {
+      onNavigate('login');
     }
   };
 

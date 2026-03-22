@@ -103,7 +103,7 @@ function App() {
             <h1 className="text-2xl font-display font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 via-violet-600 to-pink-600">
               Digital Memory
             </h1>
-            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5 opacity-80 group-hover:opacity-100 transition-opacity">Premium Journal</p>
+            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5 opacity-80 group-hover:opacity-100 transition-opacity">Welcome back, {user?.name || 'Explorer'}</p>
           </div>
         </div>
 

@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import { 
   User, Palette, Shield, Cloud, Settings2, Bell, Database, Cpu, Globe, Zap, HelpCircle, 
-  X, ChevronRight, LogOut, Trash2, ShieldCheck, Heart, Moon, Sun, Monitor, Download, Upload, Clock, Lock
+  X, ChevronRight, LogOut, Trash2, ShieldCheck, Heart, Moon, Sun, Monitor, Download, Upload, Clock, Lock,
+  LayoutGrid, MessageSquare
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useAuth } from '../hooks/useAuth';
 
 const SettingsView = ({ settings, updateSection, onBack }) => {
   const [activeTab, setActiveTab] = useState('account');
+  const { user, logout } = useAuth();
 
   const tabs = [
     { id: 'account', label: 'Account & Profile', icon: User, color: 'text-blue-500' },
@@ -31,12 +34,16 @@ const SettingsView = ({ settings, updateSection, onBack }) => {
             <section className="space-y-6">
               <div className="flex items-center gap-6 p-6 bg-lavender-50/50 rounded-3xl border border-lavender-100/50">
                 <div className="w-20 h-20 bg-white rounded-full border-2 border-white shadow-lg flex items-center justify-center relative group">
-                   <User size={32} className="text-slate-300" />
+                   {user?.avatar ? (
+                     <img src={user.avatar} className="w-full h-full rounded-full object-cover" alt="Profile" />
+                   ) : (
+                     <User size={32} className="text-slate-300" />
+                   )}
                    <button className="absolute inset-0 bg-black/20 text-white opacity-0 group-hover:opacity-100 rounded-full flex items-center justify-center transition-opacity text-[10px] font-bold">Edit</button>
                 </div>
                 <div>
-                  <h3 className="text-xl font-display font-bold text-slate-800">{settings.account.name}</h3>
-                  <p className="text-sm text-slate-500 font-medium">@{settings.account.username}</p>
+                  <h3 className="text-xl font-display font-bold text-slate-800">{user?.name || settings.account.name}</h3>
+                  <p className="text-sm text-slate-500 font-medium">@{user?.email?.split('@')[0] || settings.account.username}</p>
                 </div>
               </div>
 
@@ -45,17 +52,18 @@ const SettingsView = ({ settings, updateSection, onBack }) => {
                   <label className="text-xs font-bold text-slate-400 uppercase tracking-widest pl-1">Display Name</label>
                   <input 
                     type="text" 
-                    value={settings.account.name}
+                    value={user?.name || settings.account.name}
                     onChange={(e) => updateSection('account', { name: e.target.value })}
                     className="w-full bg-slate-50 border border-slate-100 rounded-2xl px-5 py-3.5 focus:ring-2 focus:ring-primary/20 outline-none font-medium text-slate-700" 
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-xs font-bold text-slate-400 uppercase tracking-widest pl-1">Email Address</label>
+                  <label className="text-xs font-bold text-slate-400 uppercase tracking-widest pl-1">Email Address (Read Only)</label>
                   <input 
                     type="email" 
-                    value={settings.account.email}
-                    className="w-full bg-slate-50 border border-slate-100 rounded-2xl px-5 py-3.5 focus:ring-2 focus:ring-primary/20 outline-none font-medium text-slate-700" 
+                    readOnly
+                    value={user?.email || settings.account.email}
+                    className="w-full bg-slate-100 border border-slate-200 rounded-2xl px-5 py-3.5 outline-none font-medium text-slate-500 cursor-not-allowed" 
                   />
                 </div>
               </div>
@@ -73,7 +81,7 @@ const SettingsView = ({ settings, updateSection, onBack }) => {
             <section className="pt-8 border-t border-slate-100 space-y-4">
                <h4 className="text-sm font-bold text-slate-800">Dangerous Waters</h4>
                <div className="flex gap-4">
-                  <button className="px-6 py-3 bg-red-50 text-red-500 rounded-xl text-sm font-bold hover:bg-red-100 transition-colors flex items-center gap-2">
+                  <button onClick={logout} className="px-6 py-3 bg-red-50 text-red-500 rounded-xl text-sm font-bold hover:bg-red-100 transition-colors flex items-center gap-2">
                     <LogOut size={16} /> Logout
                   </button>
                   <button className="px-6 py-3 border border-red-100 text-red-400 rounded-xl text-sm font-bold hover:bg-red-50 transition-colors flex items-center gap-2">
@@ -300,8 +308,181 @@ const SettingsView = ({ settings, updateSection, onBack }) => {
           </div>
         );
 
+      case 'backup':
+        return (
+          <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <section className="space-y-4">
+              <div className="flex items-center justify-between p-4 hover:bg-slate-50 rounded-2xl transition-colors cursor-pointer" onClick={() => updateSection('backup', { autoBackup: !settings.backup.autoBackup })}>
+                <div>
+                  <h5 className="text-sm font-bold text-slate-800">Automatic Local Backups</h5>
+                  <p className="text-xs text-slate-500">Save a copy of your memories locally every day.</p>
+                </div>
+                <div className={`w-12 h-6 rounded-full p-1 transition-colors ${settings.backup.autoBackup ? 'bg-primary' : 'bg-slate-200'}`}>
+                  <div className={`w-4 h-4 bg-white rounded-full transition-transform ${settings.backup.autoBackup ? 'translate-x-6' : 'translate-x-0'}`} />
+                </div>
+              </div>
+              <div className="flex items-center justify-between p-4 hover:bg-slate-50 rounded-2xl transition-colors cursor-pointer" onClick={() => updateSection('backup', { cloudSync: !settings.backup.cloudSync })}>
+                <div>
+                  <h5 className="text-sm font-bold text-slate-800">Cloud Sync Active</h5>
+                  <p className="text-xs text-slate-500">Keep memories synchronized across your devices.</p>
+                </div>
+                <div className={`w-12 h-6 rounded-full p-1 transition-colors ${settings.backup.cloudSync ? 'bg-primary' : 'bg-slate-200'}`}>
+                  <div className={`w-4 h-4 bg-white rounded-full transition-transform ${settings.backup.cloudSync ? 'translate-x-6' : 'translate-x-0'}`} />
+                </div>
+              </div>
+            </section>
+            
+            <section className="p-6 bg-sky-50 rounded-3xl border border-sky-100 flex items-center justify-between">
+              <div>
+                <h4 className="text-sm font-bold text-slate-800">Last Backup</h4>
+                <p className="text-xs font-medium text-sky-600 mt-1">{new Date(settings.backup.lastBackup).toLocaleString()}</p>
+              </div>
+              <button className="px-5 py-2.5 bg-white text-sky-600 rounded-xl text-xs font-bold shadow-sm hover:shadow-md transition-all">Back Up Now</button>
+            </section>
+          </div>
+        );
+
+      case 'preferences':
+        return (
+          <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+             <div className="space-y-4">
+               <h4 className="text-sm font-bold text-slate-800">Memory Defaults</h4>
+               <div className="grid grid-cols-2 gap-4">
+                 <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                    <label className="text-xs font-bold text-slate-400 uppercase tracking-widest pl-1 block mb-2">Default Type</label>
+                    <select className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 outline-none font-medium text-slate-700" value={settings.preferences.defaultType} onChange={(e) => updateSection('preferences', { defaultType: e.target.value })}>
+                      <option value="photo">Photo Journal</option>
+                      <option value="text">Text Entry</option>
+                    </select>
+                 </div>
+                 <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                    <label className="text-xs font-bold text-slate-400 uppercase tracking-widest pl-1 block mb-2">Sorting Order</label>
+                    <select className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 outline-none font-medium text-slate-700" value={settings.preferences.sorting} onChange={(e) => updateSection('preferences', { sorting: e.target.value })}>
+                      <option value="date-desc">Newest First</option>
+                      <option value="date-asc">Oldest First</option>
+                    </select>
+                 </div>
+               </div>
+             </div>
+             <div className="flex items-center justify-between p-4 hover:bg-slate-50 rounded-2xl transition-colors cursor-pointer" onClick={() => updateSection('preferences', { autoTagging: !settings.preferences.autoTagging })}>
+                <div>
+                  <h5 className="text-sm font-bold text-slate-800">Smart Auto-Tagging</h5>
+                  <p className="text-xs text-slate-500">Automatically suggest tags based on entry content.</p>
+                </div>
+                <div className={`w-12 h-6 rounded-full p-1 transition-colors ${settings.preferences.autoTagging ? 'bg-primary' : 'bg-slate-200'}`}>
+                  <div className={`w-4 h-4 bg-white rounded-full transition-transform ${settings.preferences.autoTagging ? 'translate-x-6' : 'translate-x-0'}`} />
+                </div>
+             </div>
+          </div>
+        );
+
+      case 'notifications':
+        return (
+          <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            {['reminders', 'anniversaries', 'emailPrefs'].map(key => (
+              <div key={key} className="flex items-center justify-between p-4 hover:bg-slate-50 rounded-2xl transition-colors cursor-pointer" onClick={() => updateSection('notifications', { [key]: !settings.notifications[key] })}>
+                <div>
+                  <h5 className="text-sm font-bold text-slate-800 capitalize">{key.replace(/([A-Z])/g, ' $1').trim()}</h5>
+                  <p className="text-xs text-slate-500">Enable or disable these alerts.</p>
+                </div>
+                <div className={`w-12 h-6 rounded-full p-1 transition-colors ${settings.notifications[key] ? 'bg-primary' : 'bg-slate-200'}`}>
+                  <div className={`w-4 h-4 bg-white rounded-full transition-transform ${settings.notifications[key] ? 'translate-x-6' : 'translate-x-0'}`} />
+                </div>
+              </div>
+            ))}
+          </div>
+        );
+
+      case 'storage':
+        return (
+          <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <div className="p-6 bg-slate-50 rounded-3xl border border-slate-100">
+              <div className="flex justify-between items-end mb-4">
+                 <div>
+                   <h4 className="text-sm font-bold text-slate-800">Storage Used</h4>
+                   <p className="text-2xl font-display font-black text-slate-900 mt-1">{settings.storage.used} <span className="text-sm text-slate-400">GB</span></p>
+                 </div>
+                 <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">{settings.storage.total} GB Total</p>
+              </div>
+              <div className="w-full h-3 bg-slate-200 rounded-full overflow-hidden">
+                 <div className="h-full bg-primary rounded-full transition-all" style={{ width: `${(settings.storage.used / settings.storage.total) * 100}%` }} />
+              </div>
+            </div>
+            <div className="flex items-center justify-between p-4 hover:bg-slate-50 rounded-2xl transition-colors cursor-pointer" onClick={() => updateSection('storage', { mediaOptimization: !settings.storage.mediaOptimization })}>
+                <div>
+                  <h5 className="text-sm font-bold text-slate-800">Media Optimization</h5>
+                  <p className="text-xs text-slate-500">Compress photos slightly to save cloud storage space.</p>
+                </div>
+                <div className={`w-12 h-6 rounded-full p-1 transition-colors ${settings.storage.mediaOptimization ? 'bg-primary' : 'bg-slate-200'}`}>
+                  <div className={`w-4 h-4 bg-white rounded-full transition-transform ${settings.storage.mediaOptimization ? 'translate-x-6' : 'translate-x-0'}`} />
+                </div>
+            </div>
+          </div>
+        );
+
+      case 'ai':
+        return (
+          <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            {Object.keys(settings.ai).map(key => (
+              <div key={key} className="flex items-center justify-between p-4 hover:bg-slate-50 rounded-2xl transition-colors cursor-pointer" onClick={() => updateSection('ai', { [key]: !settings.ai[key] })}>
+                <div>
+                  <h5 className="text-sm font-bold text-slate-800 capitalize">{key.replace(/([A-Z])/g, ' $1').trim()}</h5>
+                  <p className="text-xs text-slate-500">Leverage AI to enhance this functionality.</p>
+                </div>
+                <div className={`w-12 h-6 rounded-full p-1 transition-colors ${settings.ai[key] ? 'bg-primary' : 'bg-slate-200'}`}>
+                  <div className={`w-4 h-4 bg-white rounded-full transition-transform ${settings.ai[key] ? 'translate-x-6' : 'translate-x-0'}`} />
+                </div>
+              </div>
+            ))}
+          </div>
+        );
+
+      case 'localization':
+        return (
+          <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+             <div className="space-y-2">
+                <label className="text-xs font-bold text-slate-400 uppercase tracking-widest pl-1 block mb-2">Display Language</label>
+                <select className="w-full bg-slate-50 border border-slate-100 rounded-2xl px-5 py-4 outline-none font-medium text-slate-700" value={settings.localization.language} onChange={(e) => updateSection('localization', { language: e.target.value })}>
+                  <option value="en-US">English (US)</option>
+                  <option value="es-ES">Spanish</option>
+                  <option value="fr-FR">French</option>
+                  <option value="de-DE">German</option>
+                  <option value="ja-JP">Japanese</option>
+                </select>
+             </div>
+             <div className="space-y-2">
+                <label className="text-xs font-bold text-slate-400 uppercase tracking-widest pl-1 block mb-2">Timezone</label>
+                <select className="w-full bg-slate-50 border border-slate-100 rounded-2xl px-5 py-4 outline-none font-medium text-slate-700" value={settings.localization.timezone} onChange={(e) => updateSection('localization', { timezone: e.target.value })}>
+                  <option value="UTC-8">Pacific Time (US &amp; Canada)</option>
+                  <option value="UTC-7">Mountain Time (US &amp; Canada)</option>
+                  <option value="UTC-6">Central Time (US &amp; Canada)</option>
+                  <option value="UTC-5">Eastern Time (US &amp; Canada)</option>
+                  <option value="UTC+0">London, Dublin</option>
+                  <option value="UTC+1">Paris, Berlin, Rome</option>
+                </select>
+             </div>
+          </div>
+        );
+
+      case 'advanced':
+        return (
+          <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            {['beta', 'debug'].map(key => (
+              <div key={key} className="flex items-center justify-between p-4 bg-orange-50/50 hover:bg-orange-50 rounded-2xl border border-orange-100/50 transition-colors cursor-pointer" onClick={() => updateSection('advanced', { [key]: !settings.advanced[key] })}>
+                <div>
+                  <h5 className="text-sm font-bold text-orange-800 capitalize">{key} Features</h5>
+                  <p className="text-xs text-orange-600/80">Developer options. May cause instability.</p>
+                </div>
+                <div className={`w-12 h-6 rounded-full p-1 transition-colors ${settings.advanced[key] ? 'bg-orange-500' : 'bg-slate-200'}`}>
+                  <div className={`w-4 h-4 bg-white rounded-full transition-transform ${settings.advanced[key] ? 'translate-x-6' : 'translate-x-0'}`} />
+                </div>
+              </div>
+            ))}
+          </div>
+        );
+
       default:
-        return <div className="py-20 text-center text-slate-400 font-medium">Feature coming soon in V5 next patch...</div>;
+        return null;
     }
   };
 

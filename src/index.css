@@ -63,7 +63,17 @@ body {
     border-color: rgba(255, 255, 255, 0.9);
   }
   .btn-gradient {
-    @apply bg-gradient-to-br from-indigo-600 to-violet-600 text-white shadow-lg shadow-indigo-500/20 hover:shadow-indigo-500/40 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300;
+    background-image: linear-gradient(to bottom right, var(--color-primary), var(--color-accent, #ec4899));
+    color: white;
+    box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+  }
+  .btn-gradient:hover {
+    box-shadow: 0 15px 25px -5px rgba(0, 0, 0, 0.3);
+    transform: translateY(-2px);
+  }
+  .btn-gradient:active {
+    transform: translateY(0);
   }
 }
 

@@ -68,10 +68,10 @@ export const AuthProvider = ({ children }) => {
         await updateProfile(userCredential.user, {
           displayName: userData.name
         });
-        
-        // Update local state to reflect the new name immediately
-        setUser(prev => ({ ...prev, name: userData.name }));
       }
+      
+      // Sign out immediately so they have to log in manually per user request
+      await signOut(auth);
       
       return { success: true };
     } catch (error) {
