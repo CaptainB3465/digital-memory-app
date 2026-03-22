@@ -74,7 +74,7 @@ function App() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex items-center justify-center">
         <Sparkles size={32} className="text-indigo-600 animate-pulse" />
       </div>
     );
@@ -90,7 +90,7 @@ function App() {
   return (
     <div className="flex flex-col min-h-screen bg-transparent">
       {/* Top Navigation */}
-      <nav className="h-20 flex items-center justify-between px-10 glass sticky top-0 z-50 border-b border-white/20">
+      <nav className="h-20 flex items-center justify-between px-10 glass sticky top-0 z-50 border-b border-white dark:border-slate-800/20">
         <div 
           className="flex items-center gap-4 cursor-pointer group" 
           onClick={() => { setActiveCollectionId(null); setView('timeline'); setShowOnlyFavorites(false); }}
@@ -109,16 +109,16 @@ function App() {
 
         <div className="flex items-center gap-8">
           {/* View Toggle */}
-          <div className="flex bg-slate-100/80 backdrop-blur-sm p-1.5 rounded-2xl border border-white/50 shadow-inner">
+          <div className="flex bg-slate-100 dark:bg-slate-800/80 backdrop-blur-sm p-1.5 rounded-2xl border border-white dark:border-slate-800/50 shadow-inner">
             <button 
               onClick={() => setView('timeline')}
-              className={`px-5 py-2 rounded-xl flex items-center gap-2.5 transition-all duration-300 ${view === 'timeline' ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:text-indigo-600'}`}
+              className={`px-5 py-2 rounded-xl flex items-center gap-2.5 transition-all duration-300 ${view === 'timeline' ? 'bg-white dark:bg-slate-900 text-indigo-600 shadow-sm' : 'text-slate-500 hover:text-indigo-600'}`}
             >
               <List size={18} /> <span className="text-sm font-bold">Timeline</span>
             </button>
             <button 
               onClick={() => setView('scrapbook')}
-              className={`px-5 py-2 rounded-xl flex items-center gap-2.5 transition-all duration-300 ${view === 'scrapbook' ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:text-indigo-600'}`}
+              className={`px-5 py-2 rounded-xl flex items-center gap-2.5 transition-all duration-300 ${view === 'scrapbook' ? 'bg-white dark:bg-slate-900 text-indigo-600 shadow-sm' : 'text-slate-500 hover:text-indigo-600'}`}
             >
               <LayoutGrid size={18} /> <span className="text-sm font-bold">Scrapbook</span>
             </button>
@@ -131,7 +131,7 @@ function App() {
             <Plus size={20} /> Preserve a Moment
           </button>
 
-          <div className="flex items-center gap-4 border-l pl-8 border-slate-200/60 transition-all">
+          <div className="flex items-center gap-4 border-l pl-8 border-slate-200 dark:border-slate-700/60 transition-all">
             <button className="p-2.5 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50/50 rounded-xl transition-all"><Bell size={22} /></button>
             <button 
               onClick={() => setView('settings')}
@@ -140,7 +140,7 @@ function App() {
               <Settings size={22} />
             </button>
             <div className="flex items-center gap-3 ml-2">
-              <div className="w-11 h-11 bg-indigo-50 rounded-2xl flex items-center justify-center text-indigo-600 border-2 border-white shadow-sm ring-1 ring-slate-100 ring-offset-2">
+              <div className="w-11 h-11 bg-indigo-50 rounded-2xl flex items-center justify-center text-indigo-600 border-2 border-white dark:border-slate-800 shadow-sm ring-1 ring-slate-100 ring-offset-2">
                 <UserCircle size={28} />
               </div>
               <button 
@@ -157,7 +157,7 @@ function App() {
 
       <div className="flex flex-1 overflow-hidden">
         {/* Left Sidebar */}
-        <aside className="w-80 border-r border-white/40 p-10 flex flex-col gap-12 overflow-y-auto hidden lg:flex bg-white/10 backdrop-blur-md">
+        <aside className="w-80 border-r border-white dark:border-slate-800/40 p-10 flex flex-col gap-12 overflow-y-auto hidden lg:flex bg-white dark:bg-slate-900/10 backdrop-blur-md">
           <section>
             <CollectionManager 
               collections={collections}
@@ -172,16 +172,16 @@ function App() {
             <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-6 px-1">Quick Filters</h3>
             <button 
               onClick={() => setShowOnlyFavorites(!showOnlyFavorites)}
-              className={`w-full flex items-center justify-between p-4 rounded-2xl transition-all duration-300 group ${showOnlyFavorites ? 'bg-indigo-50 text-indigo-600 border border-indigo-100 shadow-sm' : 'text-slate-600 hover:bg-white/60 hover:text-indigo-600'}`}
+              className={`w-full flex items-center justify-between p-4 rounded-2xl transition-all duration-300 group ${showOnlyFavorites ? 'bg-indigo-50 text-indigo-600 border border-indigo-100 shadow-sm' : 'text-slate-600 dark:text-slate-300 hover:bg-white dark:bg-slate-900/60 hover:text-indigo-600'}`}
             >
               <div className="flex items-center gap-4">
-                <div className={`p-2 rounded-xl transition-colors ${showOnlyFavorites ? 'bg-white shadow-sm' : 'bg-slate-50 group-hover:bg-indigo-50'}`}>
+                <div className={`p-2 rounded-xl transition-colors ${showOnlyFavorites ? 'bg-white dark:bg-slate-900 shadow-sm' : 'bg-slate-50 dark:bg-slate-950 group-hover:bg-indigo-50'}`}>
                   <Heart size={18} fill={showOnlyFavorites ? "currentColor" : "none"} />
                 </div>
                 <span className="text-sm font-bold">Favorites</span>
               </div>
               {memories.filter(m => m.favorite).length > 0 && (
-                <span className={`text-[11px] px-2.5 py-0.5 rounded-full font-bold shadow-sm border transition-colors ${showOnlyFavorites ? 'bg-indigo-600 text-white border-transparent' : 'bg-white text-slate-400 border-slate-100'}`}>
+                <span className={`text-[11px] px-2.5 py-0.5 rounded-full font-bold shadow-sm border transition-colors ${showOnlyFavorites ? 'bg-indigo-600 text-white border-transparent' : 'bg-white dark:bg-slate-900 text-slate-400 border-slate-100 dark:border-slate-800'}`}>
                   {memories.filter(m => m.favorite).length}
                 </span>
               )}
@@ -190,7 +190,7 @@ function App() {
 
           <div className="mt-auto glass-card p-8 rounded-3xl relative overflow-hidden group">
             <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-24 h-24 bg-indigo-50 rounded-full blur-3xl opacity-50 group-hover:opacity-100 transition-opacity" />
-            <p className="text-sm italic text-slate-600 leading-relaxed font-semibold relative z-10">
+            <p className="text-sm italic text-slate-600 dark:text-slate-300 leading-relaxed font-semibold relative z-10">
               "We do not remember days, we remember moments."
             </p>
             <p className="text-[10px] font-bold text-slate-400 mt-4 tracking-wider">— CESARE PAVESE</p>
@@ -206,7 +206,7 @@ function App() {
                   <div className="w-1.5 h-6 bg-indigo-600 rounded-full" />
                   <span className="text-[10px] font-black text-indigo-600 uppercase tracking-[0.25em]">Your Sanctuary</span>
                 </div>
-                <h2 className="text-4xl lg:text-5xl font-display font-black text-slate-900 tracking-tight">
+                <h2 className="text-4xl lg:text-5xl font-display font-black text-slate-900 dark:text-white tracking-tight">
                   {showOnlyFavorites ? 'Loved Moments' : activeCollectionId ? collections.find(c => c.id === activeCollectionId)?.name : 'Memory Timeline'}
                 </h2>
                 <p className="text-lg text-slate-500 font-medium max-w-xl">Curate your life's most precious stories in a beautiful personal journal.</p>
@@ -219,7 +219,7 @@ function App() {
                   placeholder="Find a story..." 
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full bg-white/80 backdrop-blur-xl border border-white/50 rounded-3xl py-4.5 pl-14 pr-8 focus:ring-4 focus:ring-indigo-600/5 shadow-sm border-transparent focus:border-indigo-100 outline-none font-semibold text-slate-800 transition-all placeholder:text-slate-400 text-sm"
+                  className="w-full bg-white dark:bg-slate-900/80 backdrop-blur-xl border border-white dark:border-slate-800/50 rounded-3xl py-4.5 pl-14 pr-8 focus:ring-4 focus:ring-indigo-600/5 shadow-sm border-transparent focus:border-indigo-100 outline-none font-semibold text-slate-800 dark:text-slate-100 transition-all placeholder:text-slate-400 text-sm"
                 />
               </div>
             </header>
@@ -278,7 +278,7 @@ function App() {
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 30, stiffness: 300, mass: 0.8 }}
-              className="fixed inset-y-0 right-0 w-full max-w-2xl bg-white shadow-3xl z-[101] overflow-y-auto"
+              className="fixed inset-y-0 right-0 w-full max-w-2xl bg-white dark:bg-slate-900 shadow-3xl z-[101] overflow-y-auto"
             >
               <MemoryForm
                 onSubmit={handleAddOrUpdate}

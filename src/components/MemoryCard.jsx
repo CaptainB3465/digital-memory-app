@@ -35,10 +35,10 @@ const MemoryCard = ({ memory, onEdit, onDelete, onToggleFavorite, collectionName
       whileInView={{ opacity: 1, x: 0, scale: 1 }}
       transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
       viewport={{ once: true, margin: "-50px" }}
-      className="glass-card flex flex-col md:flex-row overflow-hidden rounded-[2.5rem] group border border-white/50"
+      className="glass-card flex flex-col md:flex-row overflow-hidden rounded-[2.5rem] group border border-white dark:border-slate-800/50"
     >
       {/* Media Section */}
-      <div className="md:w-5/12 relative h-72 md:h-auto bg-slate-50 overflow-hidden">
+      <div className="md:w-5/12 relative h-72 md:h-auto bg-slate-50 dark:bg-slate-950 overflow-hidden">
         {memory.images && memory.images.length > 0 ? (
           <div className="h-full w-full relative">
             <img 
@@ -47,7 +47,7 @@ const MemoryCard = ({ memory, onEdit, onDelete, onToggleFavorite, collectionName
               className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" 
             />
             {memory.images.length > 1 && (
-              <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-5 bg-black/30 backdrop-blur-xl px-4 py-2 rounded-2xl border border-white/20 shadow-2xl">
+              <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-5 bg-black/30 backdrop-blur-xl px-4 py-2 rounded-2xl border border-white dark:border-slate-800/20 shadow-2xl">
                 <button onClick={prevImg} className="text-white/80 hover:text-white transition-all hover:scale-125"><ChevronLeft size={18} /></button>
                 <div className="flex flex-col items-center">
                   <span className="text-[9px] text-white/60 font-black uppercase tracking-widest leading-none mb-1">Moment</span>
@@ -59,7 +59,7 @@ const MemoryCard = ({ memory, onEdit, onDelete, onToggleFavorite, collectionName
           </div>
         ) : (
           <div className="h-full w-full flex flex-col items-center justify-center bg-indigo-50/30 text-indigo-200 gap-4">
-            <div className="w-16 h-16 bg-white rounded-3xl flex items-center justify-center shadow-sm">
+            <div className="w-16 h-16 bg-white dark:bg-slate-900 rounded-3xl flex items-center justify-center shadow-sm">
                <Quote size={32} />
             </div>
             <span className="text-[10px] font-black uppercase tracking-[0.3em]">Story Only</span>
@@ -68,32 +68,32 @@ const MemoryCard = ({ memory, onEdit, onDelete, onToggleFavorite, collectionName
 
         <button 
           onClick={() => onToggleFavorite(memory.id)}
-          className={`absolute top-8 right-8 w-12 h-12 rounded-2xl flex items-center justify-center backdrop-blur-xl transition-all duration-300 shadow-2xl border border-white/30 ${memory.favorite ? 'bg-white text-rose-500 scale-110' : 'bg-black/20 text-white hover:bg-white hover:text-rose-500'}`}
+          className={`absolute top-8 right-8 w-12 h-12 rounded-2xl flex items-center justify-center backdrop-blur-xl transition-all duration-300 shadow-2xl border border-white dark:border-slate-800/30 ${memory.favorite ? 'bg-white dark:bg-slate-900 text-rose-500 scale-110' : 'bg-black/20 text-white hover:bg-white dark:bg-slate-900 hover:text-rose-500'}`}
         >
           <Heart size={22} fill={memory.favorite ? "currentColor" : "none"} />
         </button>
       </div>
 
       {/* Content Section */}
-      <div className="md:w-7/12 p-10 md:p-14 flex flex-col relative bg-white/40">
+      <div className="md:w-7/12 p-10 md:p-14 flex flex-col relative bg-white dark:bg-slate-900/40">
         <AnimatePresence>
           {showConfirm && (
             <motion.div 
                initial={{ opacity: 0 }}
                animate={{ opacity: 1 }}
                exit={{ opacity: 0 }}
-               className="absolute inset-0 z-50 bg-white/95 backdrop-blur-xl flex items-center justify-center p-12 text-center"
+               className="absolute inset-0 z-50 bg-white dark:bg-slate-900/95 backdrop-blur-xl flex items-center justify-center p-12 text-center"
             >
               <div className="space-y-8">
                 <div className="w-20 h-20 bg-rose-50 text-rose-500 rounded-[2rem] flex items-center justify-center mx-auto shadow-sm">
                    <Trash2 size={32} />
                 </div>
                 <div>
-                  <h4 className="text-2xl font-display font-black text-slate-900 leading-tight">Discard this memory?</h4>
+                  <h4 className="text-2xl font-display font-black text-slate-900 dark:text-white leading-tight">Discard this memory?</h4>
                   <p className="text-slate-500 mt-2 font-medium">This entry will be lost to time forever.</p>
                 </div>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <button onClick={() => setShowConfirm(false)} className="px-8 py-3.5 rounded-2xl border border-slate-200 text-sm font-bold text-slate-600 hover:bg-slate-50 transition-all">Keep it</button>
+                  <button onClick={() => setShowConfirm(false)} className="px-8 py-3.5 rounded-2xl border border-slate-200 dark:border-slate-700 text-sm font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:bg-slate-950 transition-all">Keep it</button>
                   <button onClick={() => onDelete(memory.id)} className="px-8 py-3.5 rounded-2xl bg-rose-500 text-white text-sm font-bold shadow-xl shadow-rose-500/25 hover:bg-rose-600 transition-all">Erase Forever</button>
                 </div>
               </div>
@@ -108,7 +108,7 @@ const MemoryCard = ({ memory, onEdit, onDelete, onToggleFavorite, collectionName
               {formattedDate}
             </div>
             {memory.location && (
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-slate-100/50 text-slate-500 rounded-xl text-[10px] font-black uppercase tracking-wider border border-slate-200/50">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-slate-100 dark:bg-slate-800/50 text-slate-500 rounded-xl text-[10px] font-black uppercase tracking-wider border border-slate-200 dark:border-slate-700/50">
                 <MapPin size={13} className="opacity-70" />
                 {memory.location}
               </div>
@@ -123,14 +123,14 @@ const MemoryCard = ({ memory, onEdit, onDelete, onToggleFavorite, collectionName
           <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-4 group-hover:translate-x-0">
             <button 
               onClick={() => onEdit(memory)}
-              className="p-2.5 bg-white text-slate-400 hover:text-indigo-600 rounded-xl shadow-sm border border-slate-100 transition-all hover:scale-110"
+              className="p-2.5 bg-white dark:bg-slate-900 text-slate-400 hover:text-indigo-600 rounded-xl shadow-sm border border-slate-100 dark:border-slate-800 transition-all hover:scale-110"
               title="Edit"
             >
               <Edit2 size={16} />
             </button>
             <button 
               onClick={() => setShowConfirm(true)}
-              className="p-2.5 bg-white text-slate-400 hover:text-rose-500 rounded-xl shadow-sm border border-slate-100 transition-all hover:scale-110"
+              className="p-2.5 bg-white dark:bg-slate-900 text-slate-400 hover:text-rose-500 rounded-xl shadow-sm border border-slate-100 dark:border-slate-800 transition-all hover:scale-110"
               title="Delete"
             >
               <Trash2 size={16} />
@@ -138,17 +138,17 @@ const MemoryCard = ({ memory, onEdit, onDelete, onToggleFavorite, collectionName
           </div>
         </div>
 
-        <h3 className="text-3xl font-display font-black text-slate-900 mb-6 leading-[1.15] tracking-tight">
+        <h3 className="text-3xl font-display font-black text-slate-900 dark:text-white mb-6 leading-[1.15] tracking-tight">
           {memory.title}
         </h3>
 
-        <p className="text-slate-600 font-medium leading-relaxed mb-10 flex-1 line-clamp-5 text-lg">
+        <p className="text-slate-600 dark:text-slate-300 font-medium leading-relaxed mb-10 flex-1 line-clamp-5 text-lg">
           {memory.story}
         </p>
 
-        <div className="mt-auto flex flex-wrap gap-3 pt-8 border-t border-slate-100">
+        <div className="mt-auto flex flex-wrap gap-3 pt-8 border-t border-slate-100 dark:border-slate-800">
           {memory.tags.map(tag => (
-            <span key={tag} className="px-3 py-1 bg-white text-[10px] font-black text-slate-400 uppercase tracking-widest rounded-lg border border-slate-50 hover:border-indigo-100 hover:text-indigo-600 transition-all cursor-pointer shadow-sm">
+            <span key={tag} className="px-3 py-1 bg-white dark:bg-slate-900 text-[10px] font-black text-slate-400 uppercase tracking-widest rounded-lg border border-slate-50 hover:border-indigo-100 hover:text-indigo-600 transition-all cursor-pointer shadow-sm">
               #{tag.toLowerCase()}
             </span>
           ))}

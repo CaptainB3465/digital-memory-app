@@ -15,7 +15,7 @@ const Timeline = ({ memories, collections, onEdit, onDelete, onToggleFavorite })
         <div className="w-20 h-20 bg-lavender-50 rounded-3xl flex items-center justify-center text-lavender-300 mb-6 drop-shadow-sm">
            <CalendarDays size={40} />
         </div>
-        <h3 className="text-xl font-display font-bold text-slate-800 mb-2">A blank page in your journey</h3>
+        <h3 className="text-xl font-display font-bold text-slate-800 dark:text-slate-100 mb-2">A blank page in your journey</h3>
         <p className="text-slate-500 max-w-sm font-medium">Every great story starts with a single moment. Click 'Preserve a Moment' to begin your digital legacy.</p>
       </motion.div>
     );
@@ -36,13 +36,13 @@ const Timeline = ({ memories, collections, onEdit, onDelete, onToggleFavorite })
       {Object.entries(groups).map(([month, monthMemories], groupIndex) => (
         <div key={month} className="relative">
           {/* Month Header */}
-          <div className="flex items-center gap-8 mb-16 sticky top-24 z-10 bg-[#f8fafc]/60 backdrop-blur-md -mx-6 px-6 py-4 rounded-3xl border border-white/40 shadow-sm">
+          <div className="flex items-center gap-8 mb-16 sticky top-24 z-10 bg-[#f8fafc]/60 backdrop-blur-md -mx-6 px-6 py-4 rounded-3xl border border-white dark:border-slate-800/40 shadow-sm">
             <div className="flex flex-col">
               <span className="text-[10px] font-black text-indigo-600 uppercase tracking-[0.3em] mb-1">Time Capsule</span>
-              <h4 className="text-xl font-display font-black text-slate-900">{month}</h4>
+              <h4 className="text-xl font-display font-black text-slate-900 dark:text-white">{month}</h4>
             </div>
             <div className="h-[1px] flex-1 bg-gradient-to-r from-slate-200 via-indigo-100 to-transparent"></div>
-            <div className="flex bg-white/50 px-3 py-1.5 rounded-xl border border-white text-[10px] font-bold text-slate-500 shadow-sm">
+            <div className="flex bg-white dark:bg-slate-900/50 px-3 py-1.5 rounded-xl border border-white dark:border-slate-800 text-[10px] font-bold text-slate-500 shadow-sm">
               {monthMemories.length} {monthMemories.length === 1 ? 'Moment' : 'Moments'}
             </div>
           </div>
@@ -55,7 +55,7 @@ const Timeline = ({ memories, collections, onEdit, onDelete, onToggleFavorite })
                 return (
                   <div key={memory.id} className="relative">
                     {/* Circle Marker */}
-                    <div className="absolute -left-[2.5rem] md:-left-[3.5rem] top-12 w-5 h-5 rounded-full bg-white border-4 border-indigo-600 shadow-xl shadow-indigo-600/20 z-10" />
+                    <div className="absolute -left-[2.5rem] md:-left-[3.5rem] top-12 w-5 h-5 rounded-full bg-white dark:bg-slate-900 border-4 border-indigo-600 shadow-xl shadow-indigo-600/20 z-10" />
                     
                     <MemoryCard
                       memory={memory}

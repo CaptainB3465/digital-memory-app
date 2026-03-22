@@ -24,10 +24,18 @@
   --radius-3xl: 3rem;
 }
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   --bg-gradient: radial-gradient(circle at top left, #f8fafc 0%, #f1f5f9 50%, #e2e8f0 100%);
   --glass-bg: rgba(255, 255, 255, 0.7);
   --glass-border: rgba(255, 255, 255, 0.5);
+}
+
+.dark {
+  --bg-gradient: radial-gradient(circle at top left, #020617 0%, #0f172a 50%, #1e293b 100%);
+  --glass-bg: rgba(2, 6, 23, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.1);
 }
 
 body {
@@ -38,6 +46,10 @@ body {
   color: #1e293b;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
+}
+
+.dark body {
+  color: #f8fafc;
 }
 
 /* Custom Utilities for the Premium SaaS Feel */

@@ -114,13 +114,18 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const updateLocalUser = (updates) => {
+    setUser(prev => ({ ...prev, ...updates }));
+  };
+
   const value = {
     user,
     loading,
     login,
     signup,
     logout,
-    resetPassword
+    resetPassword,
+    updateLocalUser
   };
 
   // We only render children once the initial Firebase auth state is determined

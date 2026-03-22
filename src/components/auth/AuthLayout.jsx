@@ -4,7 +4,7 @@ import { Sparkles, Calendar, MapPin, Heart } from 'lucide-react';
 
 const AuthLayout = ({ children, quotes, currentQuoteIndex }) => {
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col lg:flex-row overflow-hidden font-sans text-slate-800">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col lg:flex-row overflow-hidden font-sans text-slate-800 dark:text-slate-100">
       
       {/* Left Side: Emotional Visual & Brand */}
       <div className="lg:w-[45%] w-full min-h-[300px] lg:min-h-screen bg-gradient-to-br from-indigo-900 via-violet-900 to-indigo-950 text-white flex flex-col justify-between p-10 lg:p-16 relative overflow-hidden shrink-0">
@@ -21,7 +21,7 @@ const AuthLayout = ({ children, quotes, currentQuoteIndex }) => {
           <motion.div 
             animate={{ y: [0, -20, 0], rotate: [0, 5, 0] }}
             transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute top-[20%] right-[15%] bg-white/10 backdrop-blur-md p-3 rounded-2xl border border-white/20 shadow-2xl flex items-center gap-3"
+            className="absolute top-[20%] right-[15%] bg-white dark:bg-slate-900/10 backdrop-blur-md p-3 rounded-2xl border border-white dark:border-slate-800/20 shadow-2xl flex items-center gap-3"
           >
             <div className="w-10 h-10 bg-indigo-500/30 rounded-full flex items-center justify-center"><Calendar size={18} className="text-indigo-200" /></div>
             <div>
@@ -33,11 +33,11 @@ const AuthLayout = ({ children, quotes, currentQuoteIndex }) => {
           <motion.div 
             animate={{ y: [0, 15, 0], rotate: [0, -3, 0] }}
             transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-            className="absolute bottom-[35%] left-[10%] bg-white/10 backdrop-blur-md p-4 rounded-3xl border border-white/20 shadow-2xl w-48"
+            className="absolute bottom-[35%] left-[10%] bg-white dark:bg-slate-900/10 backdrop-blur-md p-4 rounded-3xl border border-white dark:border-slate-800/20 shadow-2xl w-48"
           >
-            <div className="w-full h-24 bg-gradient-to-tr from-pink-500/20 to-violet-500/20 rounded-2xl mb-3 border border-white/10" />
-            <div className="h-2 w-2/3 bg-white/20 rounded-full mb-2" />
-            <div className="h-2 w-1/2 bg-white/20 rounded-full" />
+            <div className="w-full h-24 bg-gradient-to-tr from-pink-500/20 to-violet-500/20 rounded-2xl mb-3 border border-white dark:border-slate-800/10" />
+            <div className="h-2 w-2/3 bg-white dark:bg-slate-900/20 rounded-full mb-2" />
+            <div className="h-2 w-1/2 bg-white dark:bg-slate-900/20 rounded-full" />
           </motion.div>
           
           <motion.div 
@@ -51,7 +51,7 @@ const AuthLayout = ({ children, quotes, currentQuoteIndex }) => {
 
         <div className="relative z-10 flex flex-col justify-between h-full">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/20 shadow-xl">
+            <div className="w-12 h-12 bg-white dark:bg-slate-900/10 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white dark:border-slate-800/20 shadow-xl">
               <Sparkles size={24} className="text-white" />
             </div>
             <h1 className="text-2xl font-display font-bold tracking-tight">Digital Memory</h1>
@@ -94,7 +94,7 @@ const AuthLayout = ({ children, quotes, currentQuoteIndex }) => {
 
       {/* Right Side: Authentication Forms */}
       <div className="flex-1 flex flex-col items-center justify-center p-8 sm:p-12 lg:p-24 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] relative overflow-y-auto">
-        <div className="absolute inset-0 bg-slate-50/90 backdrop-blur-3xl z-0" />
+        <div className="absolute inset-0 bg-slate-50 dark:bg-slate-950/90 backdrop-blur-3xl z-0" />
         
         <div className="w-full max-w-md relative z-10 my-auto py-8">
           {children}

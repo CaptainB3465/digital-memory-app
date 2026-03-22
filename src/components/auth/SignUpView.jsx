@@ -72,7 +72,7 @@ const SignUpView = ({ onNavigate }) => {
         className="w-full"
       >
         <div className="mb-8">
-          <h2 className="text-3xl font-display font-black text-slate-800 tracking-tight">Create your legacy</h2>
+          <h2 className="text-3xl font-display font-black text-slate-800 dark:text-slate-100 tracking-tight">Create your legacy</h2>
           <p className="text-slate-500 mt-2 font-medium">Start preserving moments that matter.</p>
         </div>
 
@@ -93,7 +93,7 @@ const SignUpView = ({ onNavigate }) => {
               <input
                 type="text"
                 placeholder="Jane Doe"
-                className="w-full bg-white/80 backdrop-blur-sm border border-slate-200 rounded-2xl pl-12 pr-5 py-4 focus:ring-4 focus:ring-indigo-600/5 focus:border-indigo-600/20 transition-all outline-none font-bold text-slate-700 placeholder:text-slate-300 shadow-sm"
+                className="w-full bg-white dark:bg-slate-900/80 backdrop-blur-sm border border-slate-200 dark:border-slate-700 rounded-2xl pl-12 pr-5 py-4 focus:ring-4 focus:ring-indigo-600/5 focus:border-indigo-600/20 transition-all outline-none font-bold text-slate-700 dark:text-slate-200 placeholder:text-slate-300 shadow-sm"
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                 disabled={loading}
@@ -108,7 +108,7 @@ const SignUpView = ({ onNavigate }) => {
               <input
                 type="email"
                 placeholder="you@example.com"
-                className="w-full bg-white/80 backdrop-blur-sm border border-slate-200 rounded-2xl pl-12 pr-5 py-4 focus:ring-4 focus:ring-indigo-600/5 focus:border-indigo-600/20 transition-all outline-none font-bold text-slate-700 placeholder:text-slate-300 shadow-sm"
+                className="w-full bg-white dark:bg-slate-900/80 backdrop-blur-sm border border-slate-200 dark:border-slate-700 rounded-2xl pl-12 pr-5 py-4 focus:ring-4 focus:ring-indigo-600/5 focus:border-indigo-600/20 transition-all outline-none font-bold text-slate-700 dark:text-slate-200 placeholder:text-slate-300 shadow-sm"
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 disabled={loading}
@@ -123,7 +123,7 @@ const SignUpView = ({ onNavigate }) => {
               <input
                 type={showPassword ? "text" : "password"}
                 placeholder="Create a strong password"
-                className="w-full bg-white/80 backdrop-blur-sm border border-slate-200 rounded-2xl pl-12 pr-12 py-4 focus:ring-4 focus:ring-indigo-600/5 focus:border-indigo-600/20 transition-all outline-none font-bold text-slate-700 placeholder:text-slate-300 shadow-sm font-mono"
+                className="w-full bg-white dark:bg-slate-900/80 backdrop-blur-sm border border-slate-200 dark:border-slate-700 rounded-2xl pl-12 pr-12 py-4 focus:ring-4 focus:ring-indigo-600/5 focus:border-indigo-600/20 transition-all outline-none font-bold text-slate-700 dark:text-slate-200 placeholder:text-slate-300 shadow-sm font-mono"
                 value={formData.password}
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                 disabled={loading}
@@ -131,7 +131,7 @@ const SignUpView = ({ onNavigate }) => {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
+                className="absolute right-5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:text-slate-300 transition-colors"
                 disabled={loading}
               >
                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
@@ -160,7 +160,7 @@ const SignUpView = ({ onNavigate }) => {
               <Lock size={18} className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-indigo-600 transition-colors" />
               <input
                 type={showPassword ? "text" : "password"}
-                className="w-full bg-white/80 backdrop-blur-sm border border-slate-200 rounded-2xl pl-12 pr-12 py-4 focus:ring-4 focus:ring-indigo-600/5 focus:border-indigo-600/20 transition-all outline-none font-bold text-slate-700 shadow-sm font-mono"
+                className="w-full bg-white dark:bg-slate-900/80 backdrop-blur-sm border border-slate-200 dark:border-slate-700 rounded-2xl pl-12 pr-12 py-4 focus:ring-4 focus:ring-indigo-600/5 focus:border-indigo-600/20 transition-all outline-none font-bold text-slate-700 dark:text-slate-200 shadow-sm font-mono"
                 value={formData.confirmPassword}
                 onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
                 disabled={loading}
@@ -174,7 +174,7 @@ const SignUpView = ({ onNavigate }) => {
             className="w-full py-4 mt-8 btn-gradient rounded-2xl text-sm font-bold flex items-center justify-center gap-2 group disabled:opacity-70 disabled:cursor-not-allowed shadow-xl shadow-indigo-600/20"
           >
             {loading ? (
-               <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+               <div className="w-5 h-5 border-2 border-white dark:border-slate-800/30 border-t-white rounded-full animate-spin" />
             ) : (
               <>
                 Create Account

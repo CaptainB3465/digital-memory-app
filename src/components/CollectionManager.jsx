@@ -21,7 +21,7 @@ const CollectionManager = ({ collections, onAdd, onDelete, activeId, onSelect })
         <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Collections</h3>
         <button 
           onClick={() => setIsAdding(!isAdding)} 
-          className={`w-8 h-8 flex items-center justify-center rounded-xl transition-all duration-300 ${isAdding ? 'bg-indigo-600 text-white rotate-45' : 'bg-white shadow-sm text-indigo-600 hover:bg-indigo-50 hover:shadow-md'}`}
+          className={`w-8 h-8 flex items-center justify-center rounded-xl transition-all duration-300 ${isAdding ? 'bg-indigo-600 text-white rotate-45' : 'bg-white dark:bg-slate-900 shadow-sm text-indigo-600 hover:bg-indigo-50 hover:shadow-md'}`}
         >
           <Plus size={18} />
         </button>
@@ -42,7 +42,7 @@ const CollectionManager = ({ collections, onAdd, onDelete, activeId, onSelect })
                 placeholder="Name your collection..." 
                 value={newCollName}
                 onChange={(e) => setNewCollName(e.target.value)}
-                className="w-full bg-white/80 backdrop-blur-sm border border-slate-200 rounded-2xl px-5 py-3.5 text-sm font-semibold focus:ring-4 focus:ring-indigo-600/5 focus:border-indigo-600/20 outline-none transition-all"
+                className="w-full bg-white dark:bg-slate-900/80 backdrop-blur-sm border border-slate-200 dark:border-slate-700 rounded-2xl px-5 py-3.5 text-sm font-semibold focus:ring-4 focus:ring-indigo-600/5 focus:border-indigo-600/20 outline-none transition-all"
               />
               <button type="submit" className="absolute right-3 top-1/2 -translate-y-1/2 bg-indigo-600 text-white text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-lg shadow-lg shadow-indigo-500/20 hover:bg-indigo-700 transition-colors">Save</button>
             </div>
@@ -52,10 +52,10 @@ const CollectionManager = ({ collections, onAdd, onDelete, activeId, onSelect })
       <div className="space-y-2">
         <button 
           onClick={() => onSelect(null)}
-          className={`w-full group flex items-center justify-between p-4 rounded-2xl transition-all duration-300 ${activeId === null ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-500/25' : 'bg-white/40 text-slate-600 hover:bg-white hover:text-indigo-600 shadow-sm border border-transparent hover:border-indigo-100/50'}`}
+          className={`w-full group flex items-center justify-between p-4 rounded-2xl transition-all duration-300 ${activeId === null ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-500/25' : 'bg-white dark:bg-slate-900/40 text-slate-600 dark:text-slate-300 hover:bg-white dark:bg-slate-900 hover:text-indigo-600 shadow-sm border border-transparent hover:border-indigo-100/50'}`}
         >
           <div className="flex items-center gap-4">
-            <div className={`p-2 rounded-xl transition-colors ${activeId === null ? 'bg-indigo-500/50' : 'bg-slate-50 group-hover:bg-indigo-50'}`}>
+            <div className={`p-2 rounded-xl transition-colors ${activeId === null ? 'bg-indigo-500/50' : 'bg-slate-50 dark:bg-slate-950 group-hover:bg-indigo-50'}`}>
               <Hash size={18} className={activeId === null ? 'text-white' : 'text-slate-400 group-hover:text-indigo-600'} />
             </div>
             <span className="text-sm font-bold">All Moments</span>
@@ -74,12 +74,12 @@ const CollectionManager = ({ collections, onAdd, onDelete, activeId, onSelect })
             >
               <button 
                 onClick={() => onSelect(c.id)}
-                className={`w-full group flex items-center justify-between p-4 rounded-2xl transition-all duration-300 ${activeId === c.id ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-500/25' : 'bg-white/40 text-slate-600 hover:bg-white hover:text-indigo-600 shadow-sm border border-transparent hover:border-indigo-100/50'}`}
+                className={`w-full group flex items-center justify-between p-4 rounded-2xl transition-all duration-300 ${activeId === c.id ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-500/25' : 'bg-white dark:bg-slate-900/40 text-slate-600 dark:text-slate-300 hover:bg-white dark:bg-slate-900 hover:text-indigo-600 shadow-sm border border-transparent hover:border-indigo-100/50'}`}
               >
                 <div className="flex items-center gap-4 overflow-hidden">
-                  <div className={`p-2 rounded-xl transition-colors ${activeId === c.id ? 'bg-indigo-500/50' : 'bg-slate-50 group-hover:bg-indigo-50'}`}>
+                  <div className={`p-2 rounded-xl transition-colors ${activeId === c.id ? 'bg-indigo-500/50' : 'bg-slate-50 dark:bg-slate-950 group-hover:bg-indigo-50'}`}>
                     <div 
-                      className="w-3 h-3 rounded-full border-2 border-white shadow-sm" 
+                      className="w-3 h-3 rounded-full border-2 border-white dark:border-slate-800 shadow-sm" 
                       style={{ backgroundColor: c.color || '#ddd' }} 
                     />
                   </div>

@@ -54,7 +54,7 @@ const LoginView = ({ onNavigate }) => {
         className="w-full"
       >
         <div className="mb-10 text-center lg:text-left">
-          <h2 className="text-3xl lg:text-4xl font-display font-black text-slate-800 tracking-tight">Welcome Back 👋</h2>
+          <h2 className="text-3xl lg:text-4xl font-display font-black text-slate-800 dark:text-slate-100 tracking-tight">Welcome Back 👋</h2>
           <p className="text-slate-500 mt-3 font-medium text-base">Continue your journey through your memories.</p>
         </div>
 
@@ -67,17 +67,17 @@ const LoginView = ({ onNavigate }) => {
 
         {/* Social Login Buttons */}
         <div className="flex flex-col sm:flex-row gap-3 mb-8">
-          <button type="button" className="flex-1 py-3.5 bg-white border border-slate-200 rounded-2xl flex items-center justify-center gap-3 hover:bg-slate-50 hover:shadow-sm transition-all text-sm font-bold text-slate-700">
+          <button type="button" className="flex-1 py-3.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl flex items-center justify-center gap-3 hover:bg-slate-50 dark:bg-slate-950 hover:shadow-sm transition-all text-sm font-bold text-slate-700 dark:text-slate-200">
             <GoogleIcon /> Google
           </button>
-          <button type="button" className="flex-1 py-3.5 bg-white border border-slate-200 rounded-2xl flex items-center justify-center gap-3 hover:bg-slate-50 hover:shadow-sm transition-all text-sm font-bold text-slate-700">
+          <button type="button" className="flex-1 py-3.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl flex items-center justify-center gap-3 hover:bg-slate-50 dark:bg-slate-950 hover:shadow-sm transition-all text-sm font-bold text-slate-700 dark:text-slate-200">
             <AppleIcon /> Apple
           </button>
         </div>
 
         <div className="flex items-center gap-4 mb-8">
           <div className="flex-1 h-px bg-slate-200"></div>
-          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest bg-slate-50/80 px-2 lg:bg-transparent">Or log in with email</span>
+          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest bg-slate-50 dark:bg-slate-950/80 px-2 lg:bg-transparent">Or log in with email</span>
           <div className="flex-1 h-px bg-slate-200"></div>
         </div>
 
@@ -89,7 +89,7 @@ const LoginView = ({ onNavigate }) => {
               <input
                 type="email"
                 placeholder="you@email.com"
-                className="w-full bg-white/80 backdrop-blur-sm border border-slate-200 rounded-2xl pl-12 pr-5 py-4 focus:ring-4 focus:ring-indigo-600/5 focus:border-indigo-600/20 transition-all outline-none font-bold text-slate-700 placeholder:text-slate-300 shadow-sm"
+                className="w-full bg-white dark:bg-slate-900/80 backdrop-blur-sm border border-slate-200 dark:border-slate-700 rounded-2xl pl-12 pr-5 py-4 focus:ring-4 focus:ring-indigo-600/5 focus:border-indigo-600/20 transition-all outline-none font-bold text-slate-700 dark:text-slate-200 placeholder:text-slate-300 shadow-sm"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 disabled={loading}
@@ -113,7 +113,7 @@ const LoginView = ({ onNavigate }) => {
               <input
                 type={showPassword ? "text" : "password"}
                 placeholder="••••••••"
-                className="w-full bg-white/80 backdrop-blur-sm border border-slate-200 rounded-2xl pl-12 pr-12 py-4 focus:ring-4 focus:ring-indigo-600/5 focus:border-indigo-600/20 transition-all outline-none font-bold text-slate-700 placeholder:text-slate-300 shadow-sm font-mono"
+                className="w-full bg-white dark:bg-slate-900/80 backdrop-blur-sm border border-slate-200 dark:border-slate-700 rounded-2xl pl-12 pr-12 py-4 focus:ring-4 focus:ring-indigo-600/5 focus:border-indigo-600/20 transition-all outline-none font-bold text-slate-700 dark:text-slate-200 placeholder:text-slate-300 shadow-sm font-mono"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 disabled={loading}
@@ -121,7 +121,7 @@ const LoginView = ({ onNavigate }) => {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
+                className="absolute right-5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:text-slate-300 transition-colors"
                 disabled={loading}
               >
                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
@@ -133,11 +133,11 @@ const LoginView = ({ onNavigate }) => {
             <button
                type="button"
                onClick={() => setRememberMe(!rememberMe)}
-               className={`w-5 h-5 rounded-md border flex items-center justify-center transition-all ${rememberMe ? 'bg-indigo-600 border-indigo-600' : 'bg-white border-slate-300'}`}
+               className={`w-5 h-5 rounded-md border flex items-center justify-center transition-all ${rememberMe ? 'bg-indigo-600 border-indigo-600' : 'bg-white dark:bg-slate-900 border-slate-300'}`}
             >
               {rememberMe && <motion.svg initial={{ scale: 0 }} animate={{ scale: 1 }} className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></motion.svg>}
             </button>
-            <span className="text-sm font-bold text-slate-600 cursor-pointer" onClick={() => setRememberMe(!rememberMe)}>Remember Me</span>
+            <span className="text-sm font-bold text-slate-600 dark:text-slate-300 cursor-pointer" onClick={() => setRememberMe(!rememberMe)}>Remember Me</span>
           </div>
 
           <button
@@ -146,7 +146,7 @@ const LoginView = ({ onNavigate }) => {
             className="w-full py-4 mt-6 btn-gradient rounded-2xl text-sm font-bold flex items-center justify-center gap-2 group disabled:opacity-70 disabled:cursor-not-allowed shadow-xl shadow-indigo-600/20"
           >
             {loading ? (
-               <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+               <div className="w-5 h-5 border-2 border-white dark:border-slate-800/30 border-t-white rounded-full animate-spin" />
             ) : (
               <>
                 Log In
