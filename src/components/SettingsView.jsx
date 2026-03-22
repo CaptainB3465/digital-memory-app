@@ -6,9 +6,9 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../hooks/useAuth';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { storage, auth } from '../firebase';
 import { updateProfile } from 'firebase/auth';
+import { withTimeout } from '../utils/timeout';
 
 const SettingsView = ({ settings, updateSection, onBack }) => {
   const [activeTab, setActiveTab] = useState('account');
@@ -16,21 +16,25 @@ const SettingsView = ({ settings, updateSection, onBack }) => {
   const fileInputRef = React.useRef(null);
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
 
+  const [errorMsg, setErrorMsg] = useState(null);
+
   const handleAvatarUpload = async (e) => {
     const file = e.target.files?.[0];
     if (!file || !user) return;
 
     setUploadingAvatar(true);
+    setErrorMsg(null);
     try {
       const fileExt = file.name.split('.').pop();
       const fileRef = ref(storage, `avatars/${user.id}_${Date.now()}.${fileExt}`);
-      await uploadBytes(fileRef, file);
+      await withTimeout(uploadBytes(fileRef, file), 10000, "Avatar Upload");
       const url = await getDownloadURL(fileRef);
       
       await updateProfile(auth.currentUser, { photoURL: url });
       updateLocalUser({ avatar: url });
     } catch (error) {
       console.error("Avatar upload failed:", error);
+      setErrorMsg(error.message || "Upload failed. Ensure you have enabled Firebase Storage and set the Security Rules to allow access.");
     } finally {
       setUploadingAvatar(false);
     }
@@ -39,11 +43,12 @@ const SettingsView = ({ settings, updateSection, onBack }) => {
   const handleAvatarRemove = async () => {
     if (!user || uploadingAvatar) return;
     setUploadingAvatar(true);
+    setErrorMsg(null);
     try {
       await updateProfile(auth.currentUser, { photoURL: "" });
       updateLocalUser({ avatar: null });
     } catch (error) {
-      console.error("Avatar removal failed:", error);
+      setErrorMsg("Failed to remove avatar. Check your connection.");
     } finally {
       setUploadingAvatar(false);
     }
@@ -96,6 +101,11 @@ const SettingsView = ({ settings, updateSection, onBack }) => {
                   <p className="text-sm text-slate-500 font-medium">@{user?.email?.split('@')[0] || settings.account.username}</p>
                 </div>
               </div>
+              {errorMsg && (
+                <div className="p-4 bg-red-50 text-red-600 rounded-2xl border border-red-100 text-sm font-bold">
+                  {errorMsg}
+                </div>
+              )}
 
               <div className="grid grid-cols-2 gap-6">
                 <div className="space-y-2">

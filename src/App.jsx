@@ -188,12 +188,12 @@ function App() {
             </button>
           </section>
 
-          <div className="mt-auto glass-card p-8 rounded-3xl relative overflow-hidden group">
-            <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-24 h-24 bg-indigo-50 rounded-full blur-3xl opacity-50 group-hover:opacity-100 transition-opacity" />
-            <p className="text-sm italic text-slate-600 dark:text-slate-300 leading-relaxed font-semibold relative z-10">
+          <div className="mt-auto glass-card p-8 rounded-3xl relative overflow-hidden group dark:bg-slate-800/40 dark:border-slate-700/50 transition-colors">
+            <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-24 h-24 bg-indigo-50 dark:bg-primary/20 rounded-full blur-3xl opacity-50 group-hover:opacity-100 transition-opacity" />
+            <p className="text-sm italic text-slate-600 dark:text-slate-300 leading-relaxed font-semibold relative z-10 transition-colors">
               "We do not remember days, we remember moments."
             </p>
-            <p className="text-[10px] font-bold text-slate-400 mt-4 tracking-wider">— CESARE PAVESE</p>
+            <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 mt-4 tracking-wider transition-colors">— MUNYUA DEVOPS</p>
           </div>
         </aside>
 

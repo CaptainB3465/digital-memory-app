@@ -3,11 +3,12 @@ import { Camera, MapPin, Tag, Calendar, X, Save, Eraser, Trash2, Sparkles, Plus 
 import { motion, AnimatePresence } from 'framer-motion';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { storage } from '../firebase';
+import { withTimeout } from '../utils/timeout';
 
-const MemoryForm = ({ onSubmit, onCancel, initialData, collections }) => {
-  const [formData, setFormData] = useState(initialData ? {
-    ...initialData,
-    images: initialData.images.map(url => ({ file: null, preview: url, isExisting: true }))
+const MemoryForm = ({ onSubmit, onClose, editingMemory, collections }) => {
+  const [formData, setFormData] = useState(editingMemory ? {
+    ...editingMemory,
+    images: editingMemory.images.map(url => ({ file: null, preview: url, isExisting: true }))
   } : {
     title: '',
     description: '',
@@ -22,6 +23,7 @@ const MemoryForm = ({ onSubmit, onCancel, initialData, collections }) => {
 
   const [newTag, setNewTag] = useState('');
   const [uploading, setUploading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState(null);
 
   const handleImageUpload = (e) => {
     const files = Array.from(e.target.files);
@@ -69,6 +71,7 @@ const MemoryForm = ({ onSubmit, onCancel, initialData, collections }) => {
     if (uploading) return;
     
     setUploading(true);
+    setErrorMsg(null);
     try {
       // Upload new images to Firebase Storage
       const uploadedUrls = await Promise.all(
@@ -76,7 +79,7 @@ const MemoryForm = ({ onSubmit, onCancel, initialData, collections }) => {
           if (img.isExisting) return img.preview;
           
           const fileRef = ref(storage, `memories/${Date.now()}_${img.file.name.replace(/[^a-zA-Z0-9.]/g, '')}`);
-          const snapshot = await uploadBytes(fileRef, img.file);
+          const snapshot = await withTimeout(uploadBytes(fileRef, img.file), 15000, "Image Upload");
           return await getDownloadURL(snapshot.ref);
         })
       );
@@ -88,6 +91,7 @@ const MemoryForm = ({ onSubmit, onCancel, initialData, collections }) => {
       });
     } catch (error) {
       console.error("Error uploading images", error);
+      setErrorMsg(error.message || "Image upload failed. Ensure Firebase Storage is initialized and security rules allow access.");
     } finally {
       setUploading(false);
     }
@@ -262,6 +266,12 @@ const MemoryForm = ({ onSubmit, onCancel, initialData, collections }) => {
               </div>
             </div>
           </div>
+          
+          {errorMsg && (
+            <div className="p-4 bg-red-50/80 backdrop-blur text-red-600 border border-red-200/50 rounded-2xl text-sm font-bold shadow-sm">
+              {errorMsg}
+            </div>
+          )}
         </form>
       </div>
 
